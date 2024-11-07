@@ -1,6 +1,6 @@
-import {model, property} from '@loopback/repository';
+import {belongsTo, model, property} from '@loopback/repository';
 import {BaseModel} from './base-model.model';
-import {TodoWithRelations} from './todo.model';
+import {Todo, TodoWithRelations} from './todo.model';
 
 @model({
   settings: {
@@ -71,6 +71,9 @@ export class Item extends BaseModel {
     },
   })
   notes?: string;
+
+  @belongsTo(() => Todo)
+  todoId: number;
 
   constructor(data?: Partial<Item>) {
     super(data);

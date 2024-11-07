@@ -1,6 +1,6 @@
-import {model, property} from '@loopback/repository';
+import {hasMany, model, property} from '@loopback/repository';
 import {BaseModel} from './base-model.model';
-import {ItemWithRelations} from './item.model';
+import {Item, ItemWithRelations} from './item.model';
 
 export enum Status {
   ACTIVE = 'active',
@@ -110,6 +110,9 @@ export class Todo extends BaseModel {
     },
   })
   deletedAt?: Date;
+
+  @hasMany(() => Item)
+  items: Item[];
 
   constructor(data?: Partial<Todo>) {
     super(data);
