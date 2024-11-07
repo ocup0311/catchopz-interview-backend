@@ -5,18 +5,18 @@ export class BaseModel extends Entity {
   @property({
     type: 'date',
     mysql: {
-      columnType: 'TIMESTAMP',
+      // columnName: 'created_at',
+      dataType: 'TIMESTAMP',
       default: 'CURRENT_TIMESTAMP',
     },
   })
   createdAt?: Date;
 
   @property({
-    type: 'date',
     mysql: {
-      columnType: 'TIMESTAMP',
+      dataType: 'TIMESTAMP',
       default: 'CURRENT_TIMESTAMP',
-      onUpdate: 'CURRENT_TIMESTAMP',
+      update: 'CURRENT_TIMESTAMP',
     },
   })
   updatedAt?: Date;
@@ -25,9 +25,3 @@ export class BaseModel extends Entity {
     super(data);
   }
 }
-
-export interface BaseModelRelations {
-  // describe navigational properties here
-}
-
-export type BaseModelWithRelations = BaseModel & BaseModelRelations;

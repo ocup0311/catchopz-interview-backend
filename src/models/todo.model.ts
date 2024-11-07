@@ -1,18 +1,40 @@
 import {model, property} from '@loopback/repository';
 import {BaseModel} from './base-model.model';
+import {ItemWithRelations} from './item.model';
 
 export enum Status {
-  ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE',
+  ACTIVE = 'active',
+  INACTIVE = 'inactive',
 }
 
 export enum Priority {
-  LOW = 'LOW',
-  MEDIUM = 'MEDIUM',
-  HIGH = 'HIGH',
+  LOW = 1,
+  MEDIUM = 2,
+  HIGH = 3,
 }
 
-@model()
+@model({
+  settings: {
+    indexes: {
+      ['idx_status']: {
+        keys: {
+          status: 1,
+        },
+      },
+      ['idx_priority']: {
+        keys: {
+          priority: -1,
+        },
+      },
+      ['idx_due_pri']: {
+        keys: {
+          dueDate: 1,
+          priority: -1,
+        },
+      },
+    },
+  },
+})
 export class Todo extends BaseModel {
   @property({
     type: 'number',
@@ -35,11 +57,14 @@ export class Todo extends BaseModel {
   @property({
     type: 'string',
     required: true,
+    mysql: {
+      dataType: "ENUM('active', 'inactive')",
+    },
     jsonSchema: {
       enum: Object.values(Status),
     },
   })
-  status: string;
+  status: Status;
 
   @property({
     type: 'string',
@@ -47,18 +72,21 @@ export class Todo extends BaseModel {
   description?: string;
 
   @property({
-    type: 'string',
+    type: 'number',
+    mysql: {
+      dataType: 'TINYINT',
+    },
     jsonSchema: {
       enum: Object.values(Priority),
     },
     default: Priority.MEDIUM,
   })
-  priority?: string;
+  priority?: Priority;
 
   @property({
     type: 'date',
     mysql: {
-      columnType: 'TIMESTAMP',
+      dataType: 'TIMESTAMP',
     },
   })
   dueDate?: Date;
@@ -78,7 +106,7 @@ export class Todo extends BaseModel {
   @property({
     type: 'date',
     mysql: {
-      columnType: 'TIMESTAMP',
+      dataType: 'TIMESTAMP',
     },
   })
   deletedAt?: Date;
@@ -90,6 +118,7 @@ export class Todo extends BaseModel {
 
 export interface TodoRelations {
   // describe navigational properties here
+  items?: ItemWithRelations[];
 }
 
 export type TodoWithRelations = Todo & TodoRelations;

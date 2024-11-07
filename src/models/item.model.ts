@@ -1,7 +1,27 @@
 import {model, property} from '@loopback/repository';
 import {BaseModel} from './base-model.model';
+import {TodoWithRelations} from './todo.model';
 
-@model()
+@model({
+  settings: {
+    foreignKeys: {
+      fkItemTodoId: {
+        name: 'fk_item_todoId',
+        entity: 'Todo',
+        entityKey: 'id',
+        foreignKey: 'todoId',
+      },
+    },
+    indexes: {
+      ['idx_tid_due']: {
+        keys: {
+          todoId: 1,
+          dueDate: 1,
+        },
+      },
+    },
+  },
+})
 export class Item extends BaseModel {
   @property({
     type: 'number',
@@ -25,7 +45,7 @@ export class Item extends BaseModel {
   @property({
     type: 'date',
     mysql: {
-      columnType: 'TIMESTAMP',
+      dataType: 'TIMESTAMP',
     },
   })
   completedAt?: Date;
@@ -33,7 +53,7 @@ export class Item extends BaseModel {
   @property({
     type: 'date',
     mysql: {
-      columnType: 'TIMESTAMP',
+      dataType: 'TIMESTAMP',
     },
   })
   dueDate?: Date;
@@ -47,7 +67,7 @@ export class Item extends BaseModel {
   @property({
     type: 'string',
     mysql: {
-      columnType: 'TEXT',
+      dataType: 'TEXT',
     },
   })
   notes?: string;
@@ -59,6 +79,7 @@ export class Item extends BaseModel {
 
 export interface ItemRelations {
   // describe navigational properties here
+  Todo?: TodoWithRelations;
 }
 
 export type ItemWithRelations = Item & ItemRelations;
