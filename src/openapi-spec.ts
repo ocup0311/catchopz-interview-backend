@@ -1,3 +1,6 @@
+import {loadEnvVars} from './config';
+loadEnvVars();
+
 import {ApplicationConfig} from '@loopback/core';
 import {CatchopzInterviewBackendApplication} from './application';
 

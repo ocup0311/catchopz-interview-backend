@@ -1,3 +1,6 @@
+import {loadEnvVars} from './config';
+loadEnvVars();
+
 import {CatchopzInterviewBackendApplication} from './application';
 
 export async function migrate(args: string[]) {

@@ -1,4 +1,10 @@
-import {ApplicationConfig, CatchopzInterviewBackendApplication} from './application';
+import {loadEnvVars} from './config';
+loadEnvVars();
+
+import {
+  ApplicationConfig,
+  CatchopzInterviewBackendApplication,
+} from './application';
 
 export * from './application';
 
