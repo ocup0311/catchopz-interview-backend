@@ -1,14 +1,15 @@
 import {BootMixin} from '@loopback/boot';
 import {ApplicationConfig} from '@loopback/core';
+import {RepositoryMixin} from '@loopback/repository';
+import {RestApplication} from '@loopback/rest';
 import {
   RestExplorerBindings,
   RestExplorerComponent,
 } from '@loopback/rest-explorer';
-import {RepositoryMixin} from '@loopback/repository';
-import {RestApplication} from '@loopback/rest';
 import {ServiceMixin} from '@loopback/service-proxy';
 import path from 'path';
 import {MySequence} from './sequence';
+import {TodoManagementService} from './services';
 
 export {ApplicationConfig};
 
@@ -17,6 +18,8 @@ export class CatchopzInterviewBackendApplication extends BootMixin(
 ) {
   constructor(options: ApplicationConfig = {}) {
     super(options);
+
+    this.setUpBindings();
 
     // Set up the custom sequence
     this.sequence(MySequence);
@@ -40,5 +43,9 @@ export class CatchopzInterviewBackendApplication extends BootMixin(
         nested: true,
       },
     };
+  }
+
+  setUpBindings(): void {
+    this.service(TodoManagementService);
   }
 }

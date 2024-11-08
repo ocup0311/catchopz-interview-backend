@@ -1,3 +1,4 @@
+import {inject} from '@loopback/core';
 import {Filter, FilterExcludingWhere, repository} from '@loopback/repository';
 import {
   del,
@@ -10,14 +11,42 @@ import {
   requestBody,
   response,
 } from '@loopback/rest';
-import {Todo} from '../models';
+import {Item, Todo} from '../models';
 import {TodoRepository} from '../repositories';
+import {TodoManagementService} from '../services';
+import {
+  TodoItemsReqBody,
+  TodoSchemaWithItems,
+} from './specs/todo-controller.specs';
 
 export class TodoController {
   constructor(
     @repository(TodoRepository)
     public todoRepository: TodoRepository,
+    @inject('services.TodoManagementService')
+    public todoManagementService: TodoManagementService,
   ) {}
+
+  @post('/todos/createWithTodos')
+  @response(200, {
+    description: 'Create a Todo with multiple Items',
+    content: {
+      'application/json': {
+        schema: TodoSchemaWithItems,
+      },
+    },
+  })
+  async createTodoListWithTodos(
+    @requestBody(TodoItemsReqBody)
+    reqData: {
+      todo: Omit<Todo, 'id'>;
+      items: Omit<Item, 'id'>[];
+    },
+  ): Promise<Todo> {
+    const {todo, items} = reqData;
+
+    return this.todoManagementService.createTodoWithItems(todo, items);
+  }
 
   @get('/todos')
   @response(200, {
