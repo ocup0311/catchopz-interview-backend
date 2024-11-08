@@ -15,6 +15,11 @@ export enum Priority {
 
 @model({
   settings: {
+    scope: {
+      where: {
+        isDeleted: false,
+      },
+    },
     indexes: {
       ['idx_status']: {
         keys: {
