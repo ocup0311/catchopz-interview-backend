@@ -27,7 +27,7 @@ export class TodoController {
     public todoManagementService: TodoManagementService,
   ) {}
 
-  @post('/todos/createWithTodos')
+  @post('/todos')
   @response(200, {
     description: 'Create a Todo with multiple Items',
     content: {
@@ -80,27 +80,6 @@ export class TodoController {
     return this.todoRepository.findById(id, filter);
   }
 
-  @post('/todos')
-  @response(200, {
-    description: 'Todo model instance',
-    content: {'application/json': {schema: getModelSchemaRef(Todo)}},
-  })
-  async create(
-    @requestBody({
-      content: {
-        'application/json': {
-          schema: getModelSchemaRef(Todo, {
-            title: 'NewTodo',
-            exclude: ['id'],
-          }),
-        },
-      },
-    })
-    todo: Omit<Todo, 'id'>,
-  ): Promise<Todo> {
-    return this.todoRepository.create(todo);
-  }
-
   @patch('/todos/{id}')
   @response(204, {
     description: 'Todo PATCH success',
@@ -135,6 +114,6 @@ export class TodoController {
     description: 'Todo DELETE success',
   })
   async deleteById(@param.path.number('id') id: number): Promise<void> {
-    await this.todoRepository.deleteById(id);
+    await this.todoRepository.softDeleteById(id);
   }
 }
