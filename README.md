@@ -8,6 +8,32 @@
 
 ### # 專案討論
 
+<!-- - enum 作法
+- date 作法
+- soft-del 動詞
+- -->
+
+### # 專案啟動 (dev)
+
+- 設定 `.env.dev`，格式如下
+
+```
+PORT=
+HOST=
+MYSQL_URL=
+MYSQL_HOST=
+MYSQL_PORT=
+MYSQL_USER=
+MYSQL_PASSWORD=
+MYSQL_DB_NAME=
+```
+
+- 初始化資料庫並啟動
+
+```
+yarn install && yarn run rebuild && yarn run migrate:dev && yarn run dev
+```
+
 ### # 聯絡方式
 
 - GitHub: [ocup0311]
